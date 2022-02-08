@@ -28,9 +28,35 @@ public class TesteCampoTreinamento {
 //		WebDriver driver = new ChromeDriver();
 		driver.manage().window().setSize(new Dimension(1200, 765));
 		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
-		driver.findElement(By.id("elementosForm:sugestoes")).sendKeys("Teste\nTeste2\nTeste3"); 
+		driver.findElement(By.id("elementosForm:sugestoes")).sendKeys("Teste"); 
+		Assert.assertEquals("Teste", driver.findElement(By.id("elementosForm:sugestoes")).getAttribute("value"));
+			
+		driver.quit();
+	}
+	
+	@Test
+	public void deveInteragirComRadioButton() {
+		WebDriver driver = new  FirefoxDriver();
+//		WebDriver driver = new ChromeDriver();
+		driver.manage().window().setSize(new Dimension(1200, 765));
+		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+		driver.findElement(By.id("elementosForm:sexo:0")).click();
+		Assert.assertTrue(driver.findElement(By.id("elementosForm:sexo:0")).isSelected());
 //		Assert.assertEquals("Teste", driver.findElement(By.id("elementosForm:sugestoes")).getAttribute("value"));
 			
-//		driver.quit();
+		driver.quit();
+	}
+	
+	@Test
+	public void deveInteragirComCheckbox() {
+		WebDriver driver = new  FirefoxDriver();
+//		WebDriver driver = new ChromeDriver();
+		driver.manage().window().setSize(new Dimension(1200, 765));
+		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+		driver.findElement(By.id("elementosForm:comidaFavorita:0")).click();
+		Assert.assertTrue(driver.findElement(By.id("elementosForm:comidaFavorita:0")).isSelected());
+//		Assert.assertEquals("Teste", driver.findElement(By.id("elementosForm:sugestoes")).getAttribute("value"));
+			
+		driver.quit();
 	}
 }

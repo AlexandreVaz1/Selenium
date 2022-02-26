@@ -1,24 +1,72 @@
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class TestAlert {
 	
+	private WebDriver driver;
+	private DSL dsl;
+	
+	@Before
+	public void inicializa() {
+		driver = new  FirefoxDriver();
+		driver.manage().window().setSize(new Dimension(1200, 765));
+		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");	
+		dsl = new DSL(driver);
+	}
+
+	@After
+	public void finaliza() {
+		driver.quit();
+		
+	}
+	
 	@Test
 	public void deveInteragirComAlertSimples() {
-		WebDriver driver = new  FirefoxDriver();
-		driver.manage().window().maximize();
-		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
-		
-		driver.findElement(By.id("alert")).click();
-		Alert alert = driver.switchTo().alert();
-		String texto = alert.getText();
+		dsl.clicarBotao("alert");
+		String texto = dsl.alertObterTextoEAceita();
 		Assert.assertEquals("Alert Simples", texto);
-		alert.accept();
 		
-		driver.findElement(By.id("elementosForm:nome")).sendKeys(texto);
+		dsl.escrever("elementosForm:nome", texto);
+	}
+	
+	@Test
+	public void deveInteragirComAlertConfirm() {
+		dsl.clicarBotao("confirm");
+		Assert.assertEquals("Confirm Simples", dsl.alertObterTextoEAceita());
+		Assert.assertEquals("Confirmado", dsl.alertObterTextoEAceita());
+		
+		dsl.clicarBotao("confirm");
+		Assert.assertEquals("Confirm Simples", dsl.alertaObterTextoENega());
+		Assert.assertEquals("Negado", dsl.alertaObterTextoENega());
+	}
+
+	@Test
+	public void deveInteragirComAlertPrompt(){
+		dsl.clicarBotao("prompt");
+		Assert.assertEquals("Digite um numero", dsl.alertaObterTexto());
+		dsl.alertaEscrever("12");
+		Assert.assertEquals("Era 12?", dsl.alertObterTextoEAceita());
+		Assert.assertEquals(":D", dsl.alertObterTextoEAceita());
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
